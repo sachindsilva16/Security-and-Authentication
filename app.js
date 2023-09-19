@@ -40,20 +40,59 @@ app.get("/login", (req, res) => {
     res.render("login");
 });
 
+app.get("/logout",(req,res)=>{
+    res.redirect("/");
+});
+
 
 app.post("/register", (req, res) => {
 
     const inputEmail = req.body.username;
     const inputPassword = req.body.password;
 
-    const newUser = new User({
-        email: inputEmail,
-        password: inputPassword
-    });
+    
 
-    newUser.save().then(() => {
-        console.log("User is added succesfully to the database");
-        res.render("secrets");
+    User.findOne({email:inputEmail}).then(foundUser=>{
+        if(foundUser){
+            if(foundUser.email === inputEmail){
+                console.log("User email already exists.. Please Login..");
+                res.redirect("/login");
+            }
+            
+        } else {
+            const newUser = new User({
+                email: inputEmail,
+                password: inputPassword
+            });
+
+            newUser.save().then(() => {
+                console.log("User is added successfully to the database");
+                res.render("secrets");
+            }).catch(err => {
+                console.log(err);
+            });
+        }
+    })
+});
+
+
+
+// Post request for /login
+
+app.post("/login", (req, res) => {
+
+    const enteredEmail = req.body.username;
+    const enteredPassword = req.body.password;
+
+    User.findOne({ email: enteredEmail }).then(foundUser => {
+        if (foundUser) {
+            if (foundUser.password === enteredPassword) {
+                console.log("Successful login..");
+                res.render("secrets");
+            }
+        } else {
+            res.redirect("/register");
+        }
     }).catch(err => {
         console.log(err);
     });
