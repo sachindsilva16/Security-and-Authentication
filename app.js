@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const { log } = require("console");
 const encrypt = require("mongoose-encryption");
+const md5 = require("md5");
 
 const app = express();
 
@@ -27,9 +28,7 @@ const userSchema = new mongoose.Schema({
 });
 
 
-// const secret = "thisismylittlesecret";
 
-userSchema.plugin(encrypt,{secret:process.env.SECRET,encryptedFields:['password']});
 
 
 const User = new mongoose.model("User", userSchema);
@@ -47,13 +46,13 @@ app.get("/home", (req, res) => {
 
 // Get request for /register
 app.get("/register", (req, res) => {
-    res.render("register");
+    res.render("register",{isRegistered:true});
 });
 
 
 // Get request for /login
 app.get("/login", (req, res) => {
-    res.render("login");
+    res.render("login",{isRegistered:"no",checkPassword:true});
 });
 
 // Get request for /logout
@@ -65,7 +64,7 @@ app.get("/logout",(req,res)=>{
 app.post("/register", (req, res) => {
 
     const inputEmail = req.body.username;
-    const inputPassword = req.body.password;
+    const inputPassword = md5(req.body.password);
 
     
 
@@ -75,7 +74,7 @@ app.post("/register", (req, res) => {
 
             if(foundUser.email === inputEmail){
                 console.log("User email already exists.. Please Login..");
-                res.redirect("/login");
+                res.render("login",{isRegistered:"yes",checkPassword:true})
             }
             
         } else {
@@ -101,7 +100,7 @@ app.post("/register", (req, res) => {
 app.post("/login", (req, res) => {
 
     const enteredEmail = req.body.username;
-    const enteredPassword = req.body.password;
+    const enteredPassword = md5(req.body.password);
 
     User.findOne({ email: enteredEmail }).then(foundUser => {
         if (foundUser) {
@@ -109,9 +108,11 @@ app.post("/login", (req, res) => {
             if (foundUser.password === enteredPassword) {
                 console.log("Successful login..");
                 res.render("secrets");
+            } else {
+                res.render("login",{isRegistered:"no",checkPassword:false})
             }
         } else {
-            res.redirect("/register");
+            res.render("register",{isRegistered:false});
         }
     }).catch(err => {
         console.log(err);
@@ -121,3 +122,9 @@ app.post("/login", (req, res) => {
 
 // Port listening
 app.listen(PORT, () => { console.log(`Your server started running on port ${ PORT }`) });
+
+
+// Hash function is a mathematical function that makes almost impossible to go back or decrypt back to original text
+
+
+//General Defination in DS: The hash function is used to map or bind the data to a particular hash value and then that hash value will be used as an index or a key to store that value in the hash table.

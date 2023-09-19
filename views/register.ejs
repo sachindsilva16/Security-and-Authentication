@@ -6,6 +6,9 @@
     <div class="col-sm-8">
       <div class="card">
         <div class="card-body">
+          <%if(isRegistered===false){%>
+            <p style="color:red;">User doesn't exists.Please sign in first!</p>
+            <%}%>
 
           <!-- Makes POST request to /register route -->
           <form action="/register" method="POST">
