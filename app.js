@@ -1,5 +1,6 @@
 const path = require("path");
 require("dotenv").config();
+// console.log(process.env);
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
@@ -33,25 +34,34 @@ userSchema.plugin(encrypt,{secret:process.env.SECRET,encryptedFields:['password'
 
 const User = new mongoose.model("User", userSchema);
 
+// Get request for home route
 app.get("/", (req, res) => {
     res.render("home");
 });
 
+// Get request for /home
+app.get("/home", (req, res) => {
+    res.render("home");
+});
 
+
+// Get request for /register
 app.get("/register", (req, res) => {
     res.render("register");
 });
 
 
+// Get request for /login
 app.get("/login", (req, res) => {
     res.render("login");
 });
 
+// Get request for /logout
 app.get("/logout",(req,res)=>{
     res.redirect("/");
 });
 
-
+// Post request for /register
 app.post("/register", (req, res) => {
 
     const inputEmail = req.body.username;
@@ -109,5 +119,5 @@ app.post("/login", (req, res) => {
 });
 
 
-
+// Port listening
 app.listen(PORT, () => { console.log(`Your server started running on port ${ PORT }`) });
