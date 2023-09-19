@@ -1,8 +1,10 @@
 const path = require("path");
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const { log } = require("console");
+const encrypt = require("mongoose-encryption");
 
 const app = express();
 
@@ -24,7 +26,12 @@ const userSchema = new mongoose.Schema({
 });
 
 
-const User = mongoose.model("User", userSchema);
+// const secret = "thisismylittlesecret";
+
+userSchema.plugin(encrypt,{secret:process.env.SECRET,encryptedFields:['password']});
+
+
+const User = new mongoose.model("User", userSchema);
 
 app.get("/", (req, res) => {
     res.render("home");
@@ -54,6 +61,8 @@ app.post("/register", (req, res) => {
 
     User.findOne({email:inputEmail}).then(foundUser=>{
         if(foundUser){
+            console.log(foundUser); 
+
             if(foundUser.email === inputEmail){
                 console.log("User email already exists.. Please Login..");
                 res.redirect("/login");
@@ -66,7 +75,7 @@ app.post("/register", (req, res) => {
             });
 
             newUser.save().then(() => {
-                console.log("User is added successfully to the database");
+                console.log("User added successfully to the database");
                 res.render("secrets");
             }).catch(err => {
                 console.log(err);
@@ -86,6 +95,7 @@ app.post("/login", (req, res) => {
 
     User.findOne({ email: enteredEmail }).then(foundUser => {
         if (foundUser) {
+            console.log(foundUser); 
             if (foundUser.password === enteredPassword) {
                 console.log("Successful login..");
                 res.render("secrets");
