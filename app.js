@@ -120,14 +120,17 @@ app.post("/login", (req, res) => {
                 if(result === true){
                     res.render("secrets");
                 } else {
-                    res.render("login",{isRegistered:true,checkPassword:false});
+                    res.render("login",{isRegistered:"no",checkPassword:false});
                 }
             }).catch(err=>{
                 console.log(err);
             });
+        } else {
+            res.render("register",{isRegistered:false});
         }
     }).catch(err=>{
         console.log(err);
+        
     });
 });
 
