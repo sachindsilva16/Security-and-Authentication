@@ -6,7 +6,10 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const { log } = require("console");
 const encrypt = require("mongoose-encryption");
-const md5 = require("md5");
+// const md5 = require("md5");
+const bcrypt = require("bcrypt");
+
+const saltRounds = 10;
 
 const app = express();
 
@@ -26,9 +29,6 @@ const userSchema = new mongoose.Schema({
     email: String,
     password: String
 });
-
-
-
 
 
 const User = new mongoose.model("User", userSchema);
@@ -64,7 +64,7 @@ app.get("/logout",(req,res)=>{
 app.post("/register", (req, res) => {
 
     const inputEmail = req.body.username;
-    const inputPassword = md5(req.body.password);
+    const inputPassword = req.body.password;
 
     
 
@@ -78,19 +78,29 @@ app.post("/register", (req, res) => {
             }
             
         } else {
-            const newUser = new User({
-                email: inputEmail,
-                password: inputPassword
+
+            bcrypt.hash(inputPassword,saltRounds).then((hashedPassword)=>{
+                const newUser = new User({
+                    email: inputEmail,
+                    password: hashedPassword
+                });
+
+
+                newUser.save().then(()=>{
+                    console.log("User updated successfully in the database");
+                    res.render("secrets");
+                }).catch(err=>{
+                    console.log(err);
+                });
+            }).catch(err=>{
+                console.log("Error occurred during hashing..");
             });
 
-            newUser.save().then(() => {
-                console.log("User added successfully to the database");
-                res.render("secrets");
-            }).catch(err => {
-                console.log(err);
-            });
+            
+
+            
         }
-    })
+    });
 });
 
 
@@ -100,7 +110,7 @@ app.post("/register", (req, res) => {
 app.post("/login", (req, res) => {
 
     const enteredEmail = req.body.username;
-    const enteredPassword = md5(req.body.password);
+    const enteredPassword = req.body.password;
 
     User.findOne({ email: enteredEmail }).then(foundUser => {
         if (foundUser) {
@@ -128,3 +138,6 @@ app.listen(PORT, () => { console.log(`Your server started running on port ${ POR
 
 
 //General Defination in DS: The hash function is used to map or bind the data to a particular hash value and then that hash value will be used as an index or a key to store that value in the hash table.
+
+
+// console.log(md5("123"));
