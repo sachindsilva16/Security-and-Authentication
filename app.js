@@ -140,9 +140,25 @@ app.post("/register", (req, res) => {
 app.post("/login", (req, res) => {
 
 
-    const user = new User({
-        username: req.body.username,
-        password: req.body.password
+    
+    User.findOne({email:enteredEmail}).then(foundUser=>{
+
+        if(foundUser){
+
+            bcrypt.compare(enteredPassword,foundUser.password).then(result=>{
+                if(result === true){
+                    res.render("secrets");
+                } else {
+                    res.render("login",{isRegistered:"no",checkPassword:false});
+                }
+            }).catch(err=>{
+                console.log(err);
+            });
+        } else {
+            res.render("register",{isRegistered:false});
+        }
+    }).catch(err=>{
+        console.log(err);
     });
 
     req.login(user, function (err) {
