@@ -159,6 +159,7 @@ app.post("/login", (req, res) => {
         }
     }).catch(err=>{
         console.log(err);
+        
     });
 
     req.login(user, function (err) {
