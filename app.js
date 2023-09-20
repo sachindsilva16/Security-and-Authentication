@@ -112,19 +112,24 @@ app.post("/login", (req, res) => {
     const enteredEmail = req.body.username;
     const enteredPassword = req.body.password;
 
-    User.findOne({ email: enteredEmail }).then(foundUser => {
-        if (foundUser) {
-            console.log(foundUser); 
-            if (foundUser.password === enteredPassword) {
-                console.log("Successful login..");
-                res.render("secrets");
-            } else {
-                res.render("login",{isRegistered:"no",checkPassword:false})
-            }
+    
+    User.findOne({email:enteredEmail}).then(foundUser=>{
+
+        if(foundUser){
+
+            bcrypt.compare(enteredPassword,foundUser.password).then(result=>{
+                if(result === true){
+                    res.render("secrets");
+                } else {
+                    res.render("login",{isRegistered:"no",checkPassword:false});
+                }
+            }).catch(err=>{
+                console.log(err);
+            });
         } else {
             res.render("register",{isRegistered:false});
         }
-    }).catch(err => {
+    }).catch(err=>{
         console.log(err);
     });
 });
