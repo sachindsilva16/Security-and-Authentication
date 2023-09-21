@@ -6,10 +6,7 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const { log } = require("console");
 const encrypt = require("mongoose-encryption");
-// const md5 = require("md5");
-const bcrypt = require("bcrypt");
 
-const saltRounds = 10;
 
 const app = express();
 
@@ -67,40 +64,7 @@ app.post("/register", (req, res) => {
     const inputPassword = req.body.password;
 
     
-
-    User.findOne({email:inputEmail}).then(foundUser=>{
-        if(foundUser){
-            console.log(foundUser); 
-
-            if(foundUser.email === inputEmail){
-                console.log("User email already exists.. Please Login..");
-                res.render("login",{isRegistered:"yes",checkPassword:true})
-            }
-            
-        } else {
-
-            bcrypt.hash(inputPassword,saltRounds).then((hashedPassword)=>{
-                const newUser = new User({
-                    email: inputEmail,
-                    password: hashedPassword
-                });
-
-
-                newUser.save().then(()=>{
-                    console.log("User updated successfully in the database");
-                    res.render("secrets");
-                }).catch(err=>{
-                    console.log(err);
-                });
-            }).catch(err=>{
-                console.log("Error occurred during hashing..");
-            });
-
-            
-
-            
-        }
-    });
+    
 });
 
 
@@ -113,25 +77,7 @@ app.post("/login", (req, res) => {
     const enteredPassword = req.body.password;
 
     
-    User.findOne({email:enteredEmail}).then(foundUser=>{
-        if(foundUser){
-
-            bcrypt.compare(enteredPassword,foundUser.password).then(result=>{
-                if(result === true){
-                    res.render("secrets");
-                } else {
-                    res.render("login",{isRegistered:"no",checkPassword:false});
-                }
-            }).catch(err=>{
-                console.log(err);
-            });
-        } else {
-            res.render("register",{isRegistered:false});
-        }
-    }).catch(err=>{
-        console.log(err);
-        
-    });
+   
 });
 
 
