@@ -28,9 +28,9 @@ app.use(bodyParser.urlencoded({
 // Use functionality of session
 
 app.use(session({
-    secret:"thisisoursecret",
-    resave:false,
-    saveUninitialized:true,
+    secret: "thisisoursecret",
+    resave: false,
+    saveUninitialized: true,
 
 }));
 
@@ -54,12 +54,12 @@ userSchema.plugin(passportLocalMongoose);
 
 const User = new mongoose.model("User", userSchema);
 
-    // Place this after the model 'User'
-    passport.use(new LocalStrategy(User.authenticate()));
+// Place this after the model 'User'
+passport.use(new LocalStrategy(User.authenticate()));
 
-    // use static serialize and deserialize of model for passport session support
-    passport.serializeUser(User.serializeUser());
-    passport.deserializeUser(User.deserializeUser());
+// use static serialize and deserialize of model for passport session support
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 
 // Get request for home route
@@ -75,18 +75,29 @@ app.get("/home", (req, res) => {
 
 // Get request for /register
 app.get("/register", (req, res) => {
-    res.render("register",{isRegistered:true});
+    res.render("register", { isRegistered: true });
 });
 
 
 // Get request for /login
 app.get("/login", (req, res) => {
-    res.render("login",{isRegistered:"no",checkPassword:true});
+    res.render("login", { isRegistered: "no", checkPassword: true });
 });
 
 // Get request for /logout
-app.get("/logout",(req,res)=>{
+app.get("/logout", (req, res) => {
     res.redirect("/");
+});
+
+
+// Authenticate /secrets
+
+app.get("/secrets", (req, res) => {
+    if (req.isAuthenticated()) {
+        res.render("secrets");
+    } else {
+        res.render("login", { isRegistered: "no", checkPassword: false });
+    }
 });
 
 // Post request for /register
@@ -95,8 +106,24 @@ app.post("/register", (req, res) => {
     const inputEmail = req.body.username;
     const inputPassword = req.body.password;
 
-    
-    
+    // This register() comes from passport-local-mongoose 
+    User.register({ username: req.body.username }, req.body.password, function (err, user) {
+        if (err) {
+            console.log(err);
+            res.redirect("/register");
+        } else {
+
+            // The authentication that we are trying to give is "local"
+            passport.authenticate("local")(req, res, function () {
+                console.log("User saved successfully");
+                res.redirect("/secrets");
+            });
+        }
+
+    });
+
+
+
 });
 
 
@@ -105,11 +132,28 @@ app.post("/register", (req, res) => {
 
 app.post("/login", (req, res) => {
 
-    const enteredEmail = req.body.username;
-    const enteredPassword = req.body.password;
 
-    
-   
+    const user = new User({
+        username: req.body.username,
+        password: req.body.password
+    });
+
+    req.login(user, function (err) {
+        if (err) {
+            console.log(err);
+            res.redirect("/login");
+        } else {
+            passport.authenticate("local")(req, res, function () {
+                console.log("Session has started successfully..");
+                res.redirect("/secrets");
+            });
+        }
+    });
+
+
+
+
+
 });
 
 

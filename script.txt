@@ -68,5 +68,13 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
+-> Authenticate session (refer  /register post route)
+-> Authenticate session upon /login.
+req.login(user, function(err) {
+  if (err) { return next(err); }
+  return res.redirect('/users/' + req.user.username);
+});
+
+
  
 
