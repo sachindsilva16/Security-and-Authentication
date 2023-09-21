@@ -8,15 +8,22 @@ const { log } = require("console");
 const encrypt = require("mongoose-encryption");
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 32d07c9 (config and use express-session)
 // Session modules
 
 const session = require("express-session");
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
+<<<<<<< HEAD
 const LocalStrategy = require("passport-local").Strategy;
 
 =======
 >>>>>>> 600fe55 (remove bcrypt and salts)
+=======
+
+>>>>>>> 32d07c9 (config and use express-session)
 
 const app = express();
 
@@ -31,6 +38,7 @@ app.use(bodyParser.urlencoded({
 // Use functionality of session
 
 app.use(session({
+<<<<<<< HEAD
     secret: "thisisoursecret",
     resave: false,
     saveUninitialized: true,
@@ -43,6 +51,14 @@ app.use(passport.initialize());
 // Start the session
 app.use(passport.session());
 
+=======
+    secret:"thisisoursecret",
+    resave:false,
+    saveUninitialized:true,
+
+}));
+
+>>>>>>> 32d07c9 (config and use express-session)
 
 mongoose.connect("mongodb://127.0.0.1:27017/usersDB", { useNewUrlParser: true });
 
