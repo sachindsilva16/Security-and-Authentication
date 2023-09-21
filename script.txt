@@ -76,5 +76,10 @@ req.login(user, function(err) {
 });
 
 
+
+-> Define /logout to terminate or deauthenticate that session.
+REFER : https://www.passportjs.org/concepts/authentication/logout/
+
+
  
 
