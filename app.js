@@ -7,6 +7,12 @@ const bodyParser = require("body-parser");
 const { log } = require("console");
 const encrypt = require("mongoose-encryption");
 
+// Session modules
+
+const session = require("express-session");
+const passport = require("passport");
+const passportLocalMongoose = require("passport-local-mongoose");
+
 
 const app = express();
 
@@ -16,6 +22,15 @@ app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({
     extended: true
+}));
+
+// Use functionality of session
+
+app.use(session({
+    secret:"thisisoursecret",
+    resave:false,
+    saveUninitialized:true,
+
 }));
 
 

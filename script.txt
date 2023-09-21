@@ -24,3 +24,6 @@ COOKIES AND SESSIONS..
  >> npm i passport-local
  >> npm i passport-local-mongoose
  >> npm i express-session (NOT express-sessions)
+
+
+ Visit this documentation :https://www.npmjs.com/package/express-session
