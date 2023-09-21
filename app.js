@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 const { log } = require("console");
 const encrypt = require("mongoose-encryption");
 
+<<<<<<< HEAD
 // Session modules
 
 const session = require("express-session");
@@ -14,6 +15,8 @@ const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 const LocalStrategy = require("passport-local").Strategy;
 
+=======
+>>>>>>> 600fe55 (remove bcrypt and salts)
 
 const app = express();
 
@@ -113,6 +116,7 @@ app.post("/register", (req, res) => {
     const inputEmail = req.body.username;
     const inputPassword = req.body.password;
 
+<<<<<<< HEAD
     // This register() comes from passport-local-mongoose 
     User.register({ username: req.body.username }, req.body.password, function (err, user) {
         if (err) {
@@ -131,6 +135,10 @@ app.post("/register", (req, res) => {
 
 
 
+=======
+    
+    
+>>>>>>> 600fe55 (remove bcrypt and salts)
 });
 
 
@@ -141,6 +149,7 @@ app.post("/login", (req, res) => {
 
 
     
+<<<<<<< HEAD
     User.findOne({email:enteredEmail}).then(foundUser=>{
 
         if(foundUser){
@@ -174,6 +183,9 @@ app.post("/login", (req, res) => {
         }
     });
 
+=======
+   
+>>>>>>> 600fe55 (remove bcrypt and salts)
 });
 
 
