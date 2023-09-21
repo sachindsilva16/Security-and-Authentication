@@ -33,6 +33,12 @@ app.use(session({
 
 }));
 
+// Initialize passport
+app.use(passport.initialize());
+
+// Start the session
+app.use(passport.session());
+
 
 mongoose.connect("mongodb://127.0.0.1:27017/usersDB", { useNewUrlParser: true });
 

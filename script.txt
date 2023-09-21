@@ -27,3 +27,19 @@ COOKIES AND SESSIONS..
 
 
  Visit this documentation :https://www.npmjs.com/package/express-session
+
+
+// Use functionality of session
+
+app.use(session({
+    secret:"thisisoursecret",
+    resave:false,
+    saveUninitialized:true,
+
+}));
+
+// Initialize passport
+app.use(passport.initialize());
+
+// Start the session
+app.use(passport.session());
