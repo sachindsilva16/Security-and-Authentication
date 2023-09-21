@@ -12,6 +12,7 @@ const encrypt = require("mongoose-encryption");
 const session = require("express-session");
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
+const LocalStrategy = require("passport-local").Strategy;
 
 
 const app = express();
@@ -48,8 +49,18 @@ const userSchema = new mongoose.Schema({
     password: String
 });
 
+userSchema.plugin(passportLocalMongoose);
+
 
 const User = new mongoose.model("User", userSchema);
+
+    // Place this after the model 'User'
+    passport.use(new LocalStrategy(User.authenticate()));
+
+    // use static serialize and deserialize of model for passport session support
+    passport.serializeUser(User.serializeUser());
+    passport.deserializeUser(User.deserializeUser());
+
 
 // Get request for home route
 app.get("/", (req, res) => {
