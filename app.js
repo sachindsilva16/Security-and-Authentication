@@ -86,7 +86,14 @@ app.get("/login", (req, res) => {
 
 // Get request for /logout
 app.get("/logout", (req, res) => {
-    res.redirect("/");
+
+    req.logout(function (err) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.redirect("/");
+        }
+    });
 });
 
 
@@ -150,11 +157,15 @@ app.post("/login", (req, res) => {
         }
     });
 
-
-
-
-
 });
+
+
+
+
+
+
+
+// });
 
 
 // Port listening
@@ -164,7 +175,4 @@ app.listen(PORT, () => { console.log(`Your server started running on port ${ POR
 // Hash function is a mathematical function that makes almost impossible to go back or decrypt back to original text
 
 
-//General Defination in DS: The hash function is used to map or bind the data to a particular hash value and then that hash value will be used as an index or a key to store that value in the hash table.
-
-
-// console.log(md5("123"));
+// General Defination in DS: The hash function is used to map or bind the data to a particular hash value and then that hash value will be used as an index or a key to store that value in the hash table.
