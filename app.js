@@ -58,7 +58,16 @@ app.use(passport.session());
 
 }));
 
+<<<<<<< HEAD
 >>>>>>> 32d07c9 (config and use express-session)
+=======
+// Initialize passport
+app.use(passport.initialize());
+
+// Start the session
+app.use(passport.session());
+
+>>>>>>> d91bc7c (Initilize passport, start session)
 
 mongoose.connect("mongodb://127.0.0.1:27017/usersDB", { useNewUrlParser: true });
 

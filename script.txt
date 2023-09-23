@@ -26,4 +26,60 @@ COOKIES AND SESSIONS..
  >> npm i express-session (NOT express-sessions)
 
 
+-> Use session.
+-> Initialize session using passport.
+-> Start the session using passport.
+-> Setup passport-local-mongoose by adding plugin.
+-> Add passport-local configuration.
+
  Visit this documentation :https://www.npmjs.com/package/express-session
+
+
+// Use functionality of session
+
+app.use(session({
+    secret:"thisisoursecret",
+    resave:false,
+    saveUninitialized:true,
+
+}));
+
+// Initialize passport
+app.use(passport.initialize());
+
+// Start the session
+app.use(passport.session());
+
+-> Next you've to setup the passport-local-mongoose.
+Visit the documentation : https://www.npmjs.com/package/passport-local-mongoose
+
+-> Add plugin to app just below the defined MONGOOSE-SCHEMA.
+ie.,   userSchema.plugin(passportLocalMongoose);
+
+-> Add passport-local configuration 
+
+const LocalStrategy = require("passport-local").Strategy;
+
+// Place this after the model 'User'
+passport.use(new LocalStrategy(User.authenticate()));
+
+// use static serialize and deserialize of model for passport session support
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+
+-> Authenticate session (refer  /register post route)
+-> Authenticate session upon /login.
+req.login(user, function(err) {
+  if (err) { return next(err); }
+  return res.redirect('/users/' + req.user.username);
+});
+
+
+
+-> Define /logout to terminate or deauthenticate that session.
+REFER : https://www.passportjs.org/concepts/authentication/logout/
+
+
+ 
+
