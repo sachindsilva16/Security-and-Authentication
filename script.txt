@@ -83,5 +83,22 @@ REFER : https://www.passportjs.org/concepts/authentication/logout/
 
  
 
-OAUTH - Open Standard Token Based Authorization
+OAUTH - Open Standard Token Based Authorization.
 
+Firebase - used to authenticate users to third party application like Airbnb,google,github,facebook etc.
+
+-  It is used as a Real-time Database to store  and sync data in real-time in apps.
+
+- It is a BaaS ( Backend-as-a-Service).
+- Provides varieties of tools and services to help them to develop quality application.
+
+- It is built on Google's infrastructure.
+- It is categorized as a noSQL database program.
+- Stores data in JSON-like documents.
+
+- Sometimes it is also known as real-time document store.
+
+-"FIREBASE" is used for real-time sync, while "MONGODB" is used for storing geospatial information.
+
+
+-Firebase uses multiple languages such as JavaScript, Swift, Kotlin, and Java.
