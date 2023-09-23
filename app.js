@@ -7,23 +7,13 @@ const bodyParser = require("body-parser");
 const { log } = require("console");
 const encrypt = require("mongoose-encryption");
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 32d07c9 (config and use express-session)
-// Session modules
 
 const session = require("express-session");
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
-<<<<<<< HEAD
 const LocalStrategy = require("passport-local").Strategy;
 
-=======
->>>>>>> 600fe55 (remove bcrypt and salts)
-=======
 
->>>>>>> 32d07c9 (config and use express-session)
 
 const app = express();
 
@@ -38,7 +28,6 @@ app.use(bodyParser.urlencoded({
 // Use functionality of session
 
 app.use(session({
-<<<<<<< HEAD
     secret: "thisisoursecret",
     resave: false,
     saveUninitialized: true,
@@ -49,25 +38,20 @@ app.use(session({
 app.use(passport.initialize());
 
 // Start the session
-app.use(passport.session());
+app.use(passport.session({
 
-=======
     secret:"thisisoursecret",
     resave:false,
     saveUninitialized:true,
 
 }));
 
-<<<<<<< HEAD
->>>>>>> 32d07c9 (config and use express-session)
-=======
 // Initialize passport
 app.use(passport.initialize());
 
 // Start the session
 app.use(passport.session());
 
->>>>>>> d91bc7c (Initilize passport, start session)
 
 mongoose.connect("mongodb://127.0.0.1:27017/usersDB", { useNewUrlParser: true });
 
@@ -141,7 +125,6 @@ app.post("/register", (req, res) => {
     const inputEmail = req.body.username;
     const inputPassword = req.body.password;
 
-<<<<<<< HEAD
     // This register() comes from passport-local-mongoose 
     User.register({ username: req.body.username }, req.body.password, function (err, user) {
         if (err) {
@@ -160,10 +143,6 @@ app.post("/register", (req, res) => {
 
 
 
-=======
-    
-    
->>>>>>> 600fe55 (remove bcrypt and salts)
 });
 
 
@@ -174,7 +153,6 @@ app.post("/login", (req, res) => {
 
 
     
-<<<<<<< HEAD
     User.findOne({email:enteredEmail}).then(foundUser=>{
 
         if(foundUser){
@@ -208,9 +186,6 @@ app.post("/login", (req, res) => {
         }
     });
 
-=======
-   
->>>>>>> 600fe55 (remove bcrypt and salts)
 });
 
 
