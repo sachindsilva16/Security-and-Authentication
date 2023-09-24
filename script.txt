@@ -102,3 +102,23 @@ Firebase - used to authenticate users to third party application like Airbnb,goo
 
 
 -Firebase uses multiple languages such as JavaScript, Swift, Kotlin, and Java.
+
+
+Why OAUTH ?
+
+
+- Provides granular access levels.(App developer can determine what kind of data he needs to fetch for).
+
+
+In this project, we're implementating using passport-google-oauth-2.0.
+
+
+- Client ID
+
+- Client secret
+
+
+
+- Require the "passport-google-oauth20" and place the GoogleStrategy configuration just below the serializeUser() and deserializeUser() of the passport.
+
+
