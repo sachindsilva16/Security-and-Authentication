@@ -126,3 +126,6 @@ In this project, we're implementating using passport-google-oauth-2.0.
 - Hence it needs to be explicitly installed using npm
 
 - Run `npm i mongoose-findorcreate` 
+- Require it, and add its plugin which is similar to passport plugin
+- Refer : https://www.npmjs.com/package/mongoose-findorcreate
+
