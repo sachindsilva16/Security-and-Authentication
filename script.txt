@@ -118,7 +118,11 @@ In this project, we're implementating using passport-google-oauth-2.0.
 - Client secret
 
 
-
 - Require the "passport-google-oauth20" and place the GoogleStrategy configuration just below the serializeUser() and deserializeUser() of the passport.
 
 
+- Now for the next step, under GoogleStrategy callbackfunction, you will notice a method "findOrCreate". It is not a function from mongoose.
+
+- Hence it needs to be explicitly installed using npm
+
+- Run `npm i mongoose-findorcreate` 
