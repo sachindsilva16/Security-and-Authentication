@@ -42,9 +42,9 @@ app.use(passport.initialize());
 // Start the session
 app.use(passport.session({
 
-    secret:"thisisoursecret",
-    resave:false,
-    saveUninitialized:true,
+    secret: "thisisoursecret",
+    resave: false,
+    saveUninitialized: true,
 
 }));
 
@@ -85,13 +85,13 @@ passport.use(new GoogleStrategy({
 
     // Endpoint to know about the user information (user-info) 
     // Since google+ api has been deprecated .. it will throw an error if this userProfileURL is not specified explicitly
-    userProfileURL:"https://www.googleapis.com/0auth2/v3/userinfo"
-  },
-  function(accessToken, refreshToken, profile, cb) {
-    User.findOrCreate({ googleId: profile.id }, function (err, user) {
-      return cb(err, user);
-    });
-  }
+    userProfileURL: "https://www.googleapis.com/0auth2/v3/userinfo"
+},
+    function (accessToken, refreshToken, profile, cb) {
+        User.findOrCreate({ googleId: profile.id }, function (err, user) {
+            return cb(err, user);
+        });
+    }
 ));
 
 
@@ -103,6 +103,21 @@ app.get("/", (req, res) => {
 // Get request for /home
 app.get("/home", (req, res) => {
     res.render("home");
+});
+
+
+// Route through OAuth
+
+app.get("/auth/google", (req, res) => {
+
+
+// we're saying use passport to authenticate our user using the Google Strategy which we hav setup above with clientID, clientSecret and other configuration settings as a new Google Strategy passing in all those things to help google to recognize the app.
+    passport.authenticate("google", { scope: ["profile"] });// This action will be recognized through a pop-up modal window.
+
+    console.log(res.statusCode);
+
+    // And then we're saying when gonna tell them that what we want is the "user-profile" and this includes their "email" and well as their "user-id"
+
 });
 
 
@@ -173,26 +188,26 @@ app.post("/register", (req, res) => {
 app.post("/login", (req, res) => {
 
 
-    
-    User.findOne({email:enteredEmail}).then(foundUser=>{
 
-        if(foundUser){
+    User.findOne({ email: enteredEmail }).then(foundUser => {
 
-            bcrypt.compare(enteredPassword,foundUser.password).then(result=>{
-                if(result === true){
+        if (foundUser) {
+
+            bcrypt.compare(enteredPassword, foundUser.password).then(result => {
+                if (result === true) {
                     res.render("secrets");
                 } else {
-                    res.render("login",{isRegistered:"no",checkPassword:false});
+                    res.render("login", { isRegistered: "no", checkPassword: false });
                 }
-            }).catch(err=>{
+            }).catch(err => {
                 console.log(err);
             });
         } else {
-            res.render("register",{isRegistered:false});
+            res.render("register", { isRegistered: false });
         }
-    }).catch(err=>{
+    }).catch(err => {
         console.log(err);
-        
+
     });
 
     req.login(user, function (err) {
